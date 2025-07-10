@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "scrape": "node scrape-cli.js",
+    "generate-keys": "node generateKeys.js",
     "vercel-build": "echo 'Build step completed'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -86,6 +86,49 @@ app.get('/', (req, res) => {
   });
 });
 
+/**
+ * HTTP Message Signatures Directory endpoint
+ * Serves a directory of signatures with the IANA media type
+ * application/http-message-signatures-directory+json
+ */
+app.get('/signatures-directory', (req, res) => {
+  // Read the public keys from the file
+  const fs = require('fs');
+  const path = require('path');
+  
+  try {
+    const publicKeysPath = path.join(__dirname, '..', 'public_keys.json');
+    const publicKeys = JSON.parse(fs.readFileSync(publicKeysPath, 'utf8'));
+    
+    // Create a signatures directory structure
+    const signaturesDirectory = {
+      signatures: [
+        {
+          id: "sig1",
+          algorithm: "ed25519",
+          key_id: publicKeys.keys[0].kid,
+          created: new Date().toISOString(),
+          expires: new Date(Date.now() + 86400000).toISOString(), // 24 hours from now
+          headers: ["(created)", "(expires)", "host", "date", "content-type"]
+        }
+      ],
+      keys: publicKeys.keys
+    };
+    
+    // Set the specific IANA media type
+    res.setHeader('Content-Type', 'application/http-message-signatures-directory+json');
+    
+    // Return the signatures directory
+    res.send(signaturesDirectory);
+  } catch (error) {
+    console.error('Error serving signatures directory:', error);
+    res.status(500).json({ 
+      error: 'Failed to serve signatures directory',
+      details: error.message
+    });
+  }
+});
+
 // If we're not in a Vercel environment, start the server normally
 if (process.env.VERCEL !== '1') {
   app.listen(port, () => {

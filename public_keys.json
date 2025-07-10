@@ -1,0 +1,12 @@
+{
+  "keys": [
+    {
+      "kid": "rLsT1he0RMNVPaFwAs6u7jhxAHJiLMmBMM1HNcUZrTc",
+      "kty": "OKP",
+      "crv": "Ed25519",
+      "x": "DCdYGH3-ahwW9KdhRsW02WU75Om_Tb6WKdczih5_3wE",
+      "nbf": 1752174878083
+    }
+  ],
+  "purpose": "rag"
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP Message Signatures Directory Documentation</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        pre.code {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: monospace;
+        }
+        
+        .doc-section {
+            margin-bottom: 30px;
+        }
+        
+        .doc-section h2 {
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+        }
+        
+        .doc-section h3 {
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 16px 0;
+        }
+        
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        table th {
+            background-color: #f8f9fa;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #0366d6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">&larr; Back to Main Page</a>
+        
+        <h1>HTTP Message Signatures Directory Documentation</h1>
+        
+        <div class="doc-section">
+            <h2>Overview</h2>
+            <p>
+                This API implements the HTTP Message Signatures Directory format as specified in the IANA media types registry.
+                The content type <code>application/http-message-signatures-directory+json</code> is used for serving a directory
+                of available HTTP message signatures.
+            </p>
+        </div>
+        
+        <div class="doc-section">
+            <h2>Endpoint</h2>
+            <p>GET <code>/signatures-directory</code></p>
+            <p>
+                Returns a directory of HTTP message signatures available for validation, including 
+                the cryptographic keys used for signing.
+            </p>
+        </div>
+        
+        <div class="doc-section">
+            <h2>Response Format</h2>
+            <p>The response is a JSON object with the following structure:</p>
+            <pre class="code">{
+  "signatures": [
+    {
+      "id": "sig1",
+      "algorithm": "ed25519",
+      "key_id": "[key identifier]",
+      "created": "2025-07-10T19:30:00Z",
+      "expires": "2025-07-11T19:30:00Z",
+      "headers": ["(created)", "(expires)", "host", "date", "content-type"]
+    }
+  ],
+  "keys": [
+    {
+      "kid": "[key identifier]",
+      "kty": "OKP",
+      "crv": "Ed25519",
+      "x": "[public key]",
+      "nbf": 1752174878083
+    }
+  ]
+}</pre>
+        </div>
+        
+        <div class="doc-section">
+            <h2>Fields Description</h2>
+            
+            <h3>Signatures Object</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>The identifier for the signature</td>
+                </tr>
+                <tr>
+                    <td>algorithm</td>
+                    <td>The algorithm used for signing (e.g., ed25519, rsa-v1_5-sha256)</td>
+                </tr>
+                <tr>
+                    <td>key_id</td>
+                    <td>Reference to the key used for signing (matches a kid in the keys array)</td>
+                </tr>
+                <tr>
+                    <td>created</td>
+                    <td>ISO 8601 timestamp when the signature was created</td>
+                </tr>
+                <tr>
+                    <td>expires</td>
+                    <td>ISO 8601 timestamp when the signature expires</td>
+                </tr>
+                <tr>
+                    <td>headers</td>
+                    <td>Array of HTTP header fields included in the signature</td>
+                </tr>
+            </table>
+            
+            <h3>Keys Object</h3>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>kid</td>
+                    <td>Key identifier (JWK Thumbprint)</td>
+                </tr>
+                <tr>
+                    <td>kty</td>
+                    <td>Key type (e.g., "OKP" for Octet Key Pair)</td>
+                </tr>
+                <tr>
+                    <td>crv</td>
+                    <td>Curve used for the key (e.g., "Ed25519")</td>
+                </tr>
+                <tr>
+                    <td>x</td>
+                    <td>Public key data (base64url encoded)</td>
+                </tr>
+                <tr>
+                    <td>nbf</td>
+                    <td>Not Before timestamp (milliseconds since epoch)</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="doc-section">
+            <h2>IANA Registration</h2>
+            <p>
+                The media type <code>application/http-message-signatures-directory+json</code> is registered
+                with IANA in the "Media Types" registry.
+            </p>
+        </div>
+        
+        <a href="/" class="back-link">&larr; Back to Main Page</a>
+    </div>
+</body>
+</html>
