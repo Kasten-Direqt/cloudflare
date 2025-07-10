@@ -1,15 +1,11 @@
 const express = require('express');
-const axios = require('axios');
-const path = require('path');
+const axios = require('./node_modules/axios/index.d.cts');
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 // Middleware to parse JSON in request body
 app.use(express.json());
-
-// Serve static files from the public directory
-app.use(express.static(path.join(__dirname, '..', 'public')));
 
 /**
  * Scraper endpoint to fetch content from a provided URL

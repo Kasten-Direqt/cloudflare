@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Scraper UI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Simple Scraper</h1>
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="Enter a URL (e.g., https://example.com)" class="url-input">
+            <button id="testBtn" class="test-btn">Test Connection</button>
+        </div>
+        
+        <div class="result-container">
+            <div id="statusContainer" class="status-container hidden">
+                <h3>Status:</h3>
+                <div id="statusCode" class="status-code"></div>
+            </div>
+            
+            <div id="contentPreview" class="content-preview hidden">
+                <h3>Content Preview:</h3>
+                <pre id="contentSnippet"></pre>
+            </div>
+            
+            <div id="errorMessage" class="error-message hidden"></div>
+            
+            <div id="loadingIndicator" class="loading-indicator hidden">
+                <div class="spinner"></div>
+                <p>Fetching data...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
