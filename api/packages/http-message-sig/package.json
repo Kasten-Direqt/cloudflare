@@ -1,0 +1,48 @@
+{
+  "name": "http-message-sig",
+  "version": "0.1.0",
+  "description": "HTTP Message Signatures defined by RFC 9421",
+  "main": "./dist/index.js",
+  "module": "./dist/index_.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index_.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "prepublishOnly": "npm run build",
+    "test": "vitest",
+    "watch": "npm run build -- --watch src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloudflareresearch/web-bot-auth.git",
+    "directory": "packages/http-message-sig"
+  },
+  "keywords": [
+    "http-message-sig",
+    "rfc9421",
+    "cryptography",
+    "http-message-signatures",
+    "typescript"
+  ],
+  "contributors": [
+    "Daniel Hensby",
+    "LTO Network",
+    "Thibault Meunier"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/cloudflareresearch/web-bot-auth/issues"
+  },
+  "homepage": "https://github.com/cloudflareresearch/web-bot-auth#readme"
+}

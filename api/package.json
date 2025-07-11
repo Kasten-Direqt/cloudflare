@@ -7,7 +7,8 @@
     "scrape": "node scrape-cli.js",
     "generate-keys": "node generateKeys.js",
     "vercel-build": "echo 'Build step completed'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "hi": "node hi.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,10 @@
   "description": "",
   "dependencies": {
     "axios": "^1.10.0",
-    "express": "^5.1.0"
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "tsx": "^4.20.3",
+    "web-bot-auth": "file:packages/web-bot-auth"
   }
 }

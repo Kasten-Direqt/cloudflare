@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const contentSnippet = document.getElementById('contentSnippet');
     const errorMessage = document.getElementById('errorMessage');
     const loadingIndicator = document.getElementById('loadingIndicator');
+    
+    // Add function to check signature headers
+    const checkSignatureBtn = document.getElementById('checkSignatureBtn');
+    if (checkSignatureBtn) {
+        checkSignatureBtn.addEventListener('click', checkSignatureHeaders);
+    }
 
     // Add event listener to the test button
     testBtn.addEventListener('click', testConnection);
@@ -108,5 +114,56 @@ document.addEventListener('DOMContentLoaded', function() {
     function showError(message) {
         errorMessage.textContent = message;
         errorMessage.classList.remove('hidden');
+    }
+    
+    // Function to check signature headers
+    function checkSignatureHeaders() {
+        // Show loading indicator
+        loadingIndicator.classList.remove('hidden');
+        errorMessage.classList.add('hidden');
+        contentPreview.classList.add('hidden');
+        
+        // Fetch the signature directory
+        fetch('/.well-known/http-message-signatures-directory')
+            .then(response => {
+                // Get all headers
+                const headers = {};
+                for (const [key, value] of response.headers.entries()) {
+                    headers[key] = value;
+                }
+                
+                // Check if signature headers exist
+                const signatureHeader = headers['signature'] || 'Not found';
+                const signatureInputHeader = headers['signature-input'] || 'Not found';
+                
+                // Create header info display
+                const headerInfo = {
+                    'Headers Received': 'The following headers were received from the server:',
+                    'Signature': signatureHeader,
+                    'Signature-Input': signatureInputHeader,
+                    'All Headers': headers
+                };
+                
+                // Hide loading indicator
+                loadingIndicator.classList.add('hidden');
+                contentPreview.classList.remove('hidden');
+                
+                // Display headers in the content area
+                contentSnippet.innerHTML = JSON.stringify(headerInfo, null, 2)
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+                
+                // Update status
+                statusContainer.classList.remove('hidden');
+                statusCode.textContent = response.status;
+                statusCode.className = 'status-code success';
+                
+                return response.json();
+            })
+            .catch(error => {
+                // Hide loading indicator and show error
+                loadingIndicator.classList.add('hidden');
+                showError(`Failed to fetch signatures: ${error.message}`);
+            });
     }
 });

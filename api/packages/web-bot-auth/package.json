@@ -1,0 +1,52 @@
+{
+  "name": "web-bot-auth",
+  "version": "0.1.1",
+  "description": "Web Bot Authentication using HTTP Message Signatures",
+  "main": "./dist/index.js",
+  "module": "./dist/index_.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index_.mjs"
+    },
+    "./crypto": {
+      "types": "./dist/crypto.d.ts",
+      "require": "./dist/crypto.js",
+      "import": "./dist/crypto_.mjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/crypto.ts --format cjs,esm --dts --clean",
+    "generate-test-vectors": "node --experimental-transform-types scripts/test-vectors.ts test/test_data/web_bot_auth_architecture_v1.json",
+    "prepublishOnly": "npm run build",
+    "test": "vitest",
+    "watch": "npm run build -- --watch src",
+    "run-test": "node --import tsx scripts/test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloudflareresearch/web-bot-auth.git",
+    "directory": "packages/web-bot-auth"
+  },
+  "keywords": [
+    "web-bot-auth",
+    "cryptography",
+    "typescript"
+  ],
+  "author": "Thibault Meunier",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/cloudflareresearch/web-bot-auth/issues"
+  },
+  "homepage": "https://github.com/cloudflareresearch/web-bot-auth#readme",
+  "dependencies": {
+    "http-message-sig": "^0.1.0",
+    "jsonwebkey-thumbprint": "^0.1.0"
+  }
+}

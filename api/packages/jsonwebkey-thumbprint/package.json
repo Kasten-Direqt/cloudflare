@@ -1,0 +1,44 @@
+{
+  "name": "jsonwebkey-thumbprint",
+  "version": "0.1.0",
+  "description": "JWK Thumbprint defined by RFC 7638",
+  "main": "./dist/index.js",
+  "module": "./dist/index_.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index_.mjs"
+    }
+  },
+  "scripts": {
+    "bench": "vitest bench",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "prepublishOnly": "npm run build",
+    "test": "vitest",
+    "watch": "npm run build -- --watch src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloudflareresearch/web-bot-auth.git",
+    "directory": "packages/jwt-thumbprint"
+  },
+  "keywords": [
+    "jsonwebkey-thumbprint",
+    "rfc7638",
+    "cryptography",
+    "jwk",
+    "typescript"
+  ],
+  "author": "Thibault Meunier",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/cloudflareresearch/web-bot-auth/issues"
+  },
+  "homepage": "https://github.com/cloudflareresearch/web-bot-auth#readme"
+}

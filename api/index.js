@@ -1,12 +1,26 @@
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
+const cors = require('cors');
+
+const signatures = require('./test.js'); // Import the functions from the compiled JS file
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 // Middleware to parse JSON in request body
 app.use(express.json());
+
+// Add CORS middleware with specific configuration
+app.use(cors({
+  exposedHeaders: ['Signature', 'Signature-Input'],
+  credentials: true,
+  origin: true
+}));
+
+require('dotenv').config()
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, '..', 'public')));
@@ -90,36 +104,81 @@ app.get('/', (req, res) => {
  * HTTP Message Signatures Directory endpoint
  * Serves a directory of signatures with the IANA media type
  * application/http-message-signatures-directory+json
+ * 
+ * This implements the IETF draft-meunier-http-message-signatures-directory-01
+ * https://datatracker.ietf.org/doc/draft-meunier-http-message-signatures-directory/01/
  */
-app.get('/signatures-directory', (req, res) => {
+app.get('/.well-known/http-message-signatures-directory', async (req, res) => {
   // Read the public keys from the file
   const fs = require('fs');
-  const path = require('path');
+  const signatureUtils = require('./signatureUtils');
   
   try {
-    const publicKeysPath = path.join(__dirname, '..', 'public_keys.json');
-    const publicKeys = JSON.parse(fs.readFileSync(publicKeysPath, 'utf8'));
+    // Set CORS headers specific to this endpoint
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Expose-Headers', 'Signature, Signature-Input');
+
+    // const privateKeyPath = path.join(__dirname, '..', 'private_key.pem');
+    const publicKeys = {
+  "keys": [
+    {
+      "kid": "aZgrLENlYZ3zQx7sQmLXTllDr17UCi4On2yp7ILRHN0",
+      "kty": "OKP",
+      "crv": "Ed25519",
+      "x": "kKtwzBjDRUol1mE-5BtPa3n7mwoJDFfItL_dcAQ1qns",
+    }
+  ],
+  "purpose": "rag"
+};
+
+    // Get the key ID (JWK thumbprint) from the public keys file
+    const kid = publicKeys.keys[0].kid;
     
-    // Create a signatures directory structure
-    const signaturesDirectory = {
-      signatures: [
-        {
-          id: "sig1",
-          algorithm: "ed25519",
-          key_id: publicKeys.keys[0].kid,
-          created: new Date().toISOString(),
-          expires: new Date(Date.now() + 86400000).toISOString(), // 24 hours from now
-          headers: ["(created)", "(expires)", "host", "date", "content-type"]
-        }
-      ],
-      keys: publicKeys.keys
+    // Prepare the response data (only include necessary fields for the directory)
+    const keyDirectory = {
+      keys: publicKeys.keys.map(key => ({
+        kty: key.kty,
+        crv: key.crv,
+        x: key.x
+      }))
     };
     
-    // Set the specific IANA media type
-    res.setHeader('Content-Type', 'application/http-message-signatures-directory+json');
+    // Set the specific IANA media type as required
+    res.set({'Content-Type': 'application/http-message-signatures-directory+json'});
+    res.setHeader('Cache-Control', 'max-age=10'); // Cache for 24 hours
     
-    // Return the signatures directory
-    res.send(signaturesDirectory);
+    // Sign the response
+    const host = req.get('host') || 'localhost';
+    // We'll use web-bot-auth signatures instead of signatureUtils
+    // const signatureHeaders = await signatureUtils.signMessage({
+    //   kid: kid,
+    //   components: ['@authority'],
+    //   authority: host
+    // });
+
+    try {
+      // Get signature headers (wait for the Promise to resolve)
+      const sHeaders = await signatures.getSignatureHeaders();
+      
+      // Set signature headers
+      res.setHeader('Signature', sHeaders['Signature']);
+      res.setHeader('Signature-Input', sHeaders['Signature-Input']);
+      
+      // Log the headers being set for debugging
+      console.log('Setting signature headers from web-bot-auth:');
+      console.log('Signature:', sHeaders['Signature']);
+      console.log('Signature-Input:', sHeaders['Signature-Input']);
+      
+      // Return the key directory
+      res.send(keyDirectory);
+    } catch (error) {
+      console.error('Error getting signature headers:', error);
+      res.status(500).json({ 
+        error: 'Failed to generate signature headers',
+        details: error.message
+      });
+    }
   } catch (error) {
     console.error('Error serving signatures directory:', error);
     res.status(500).json({ 

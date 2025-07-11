@@ -1,11 +1,11 @@
 {
   "keys": [
     {
-      "kid": "rLsT1he0RMNVPaFwAs6u7jhxAHJiLMmBMM1HNcUZrTc",
+      "kid": "lgsXrHf9RyBqPLbo8M8Bnahed-bD1WnoJAqAlSZF9rA",
       "kty": "OKP",
       "crv": "Ed25519",
-      "x": "DCdYGH3-ahwW9KdhRsW02WU75Om_Tb6WKdczih5_3wE",
-      "nbf": 1752174878083
+      "x": "Gh01KtrAF5QLIW1dAyObXIPFvoBKlhjqutROJUkvY7U",
+      "nbf": 1752186550750
     }
   ],
   "purpose": "rag"
