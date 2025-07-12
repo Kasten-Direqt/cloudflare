@@ -33,6 +33,9 @@ This project provides a working implementation of [HTTP Message Signatures](http
 └── vercel.json            # Vercel deployment configuration
 ```
 
+uses packages from here:
+https://github.com/cloudflare/web-bot-auth/tree/main/packages
+
 ## Prerequisites
 
 - Node.js 18.0.0 or higher
