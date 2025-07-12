@@ -1,0 +1,24 @@
+{
+  "name": "cloudflare-http-message-signatures-demo",
+  "version": "1.0.0",
+  "description": "A full-stack application demonstrating HTTP Message Signatures for secure API communication",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node api/index.js"
+  },
+  "keywords": [
+    "http-message-signatures",
+    "cloudflare",
+    "ed25519",
+    "api",
+    "security",
+    "cryptography"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

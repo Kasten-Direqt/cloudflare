@@ -3,28 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Scraper UI</title>
+    <title>Cloudflare Web Bot Auth Testing</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Simple Scraper</h1>
+        <h1>Cloudflare Web Bot Auth Testing</h1>
         <div class="input-group">
             <input type="text" id="urlInput" placeholder="Enter a URL (e.g., https://example.com)" class="url-input">
             <button id="testBtn" class="test-btn">Test Connection</button>
         </div>
         
         <div class="api-info">
-            <h3>Available API Endpoints:</h3>
-            <ul>
-                <li><strong>POST /scrape</strong> - Scrape content from a URL</li>
-                <li><strong>GET /signatures-directory</strong> - HTTP Message Signatures Directory 
-                    <span class="badge">application/http-message-signatures-directory+json</span>
-                    <a href="/.well-known/http-message-signatures-directory" target="_blank" class="api-link">Try it</a>
-                    <button id="checkSignatureBtn" class="test-btn">Check Signature Headers</button>
-                    <a href="/http-signatures-docs.html" target="_blank" class="doc-link">Documentation</a>
-                </li>
-            </ul>
+            <h3>Check http-message-signatures-directory</h3>
+            <span class="badge">application/http-message-signatures-directory+json</span>
+            <a href="/.well-known/http-message-signatures-directory" target="_blank" class="api-link">Try it</a>
+            <button id="checkSignatureBtn" class="test-btn">Check Signature Headers</button>
         </div>
         
         <div class="result-container">

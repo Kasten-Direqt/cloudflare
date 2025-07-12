@@ -1,6 +1,6 @@
 .vercel
 node_modules
 package-lock.json
-private_key.pem
-key_pair.json
+privateKey.json
 .env
+archive
