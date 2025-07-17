@@ -36,7 +36,7 @@ app.get('/.well-known/http-message-signatures-directory', async (req, res) => {
     res.setHeader('Cache-Control', 'max-age=86400');
     
     try {
-      const sigHeaders = await signatures.getSignatureHeaders();
+      const sigHeaders = await signatures.getDirectoryHeaders();
 
       res.setHeader('Signature', sigHeaders['Signature']);
       res.setHeader('Signature-Input', sigHeaders['Signature-Input']);
@@ -44,8 +44,7 @@ app.get('/.well-known/http-message-signatures-directory', async (req, res) => {
       console.log('Setting signature headers from web-bot-auth:');
       console.log('Signature:', sigHeaders['Signature']);
       console.log('Signature-Input:', sigHeaders['Signature-Input']);
-
-      res.send(keyDirectory);
+      res.send(Buffer.from(JSON.stringify(keyDirectory), 'utf8'));
     } catch (error) {
       console.error('Error getting signature headers:', error);
       res.status(500).json({ 
@@ -81,10 +80,14 @@ app.post('/scrape', async (req, res) => {
     }
 
     console.log(`Scraping URL: ${url}`);
+
+    const reqHeaders = await signatures.getRequestHeaders(url);
     
     const response = await axios.get(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; SimpleScraper/1.0)'
+        'User-Agent': 'Mozilla/5.0 (compatible; SimpleScraper/1.0)',
+        'Signature': reqHeaders['Signature'],
+        'Signature-Input': reqHeaders['Signature-Input']
       },
       timeout: 10000
     });
